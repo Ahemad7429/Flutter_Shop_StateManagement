@@ -38,6 +38,8 @@ class MyApp extends StatelessWidget {
           NavigationPath.productDetailScreen: (ctx) => ProductDetailScreen(),
           NavigationPath.cartScreen: (ctx) => CartScreen(),
           NavigationPath.orderScreen: (ctx) => OrdersScreen(),
+          NavigationPath.userProductsScreen: (ctx) => UserProductsScreen(),
+          NavigationPath.editProductScreen: (ctx) => EditProductScreen(),
         },
       ),
     );
