@@ -11,6 +11,7 @@ class AppDrawer extends StatelessWidget {
             title: Text(
               'Hello, AhemadAbbas',
             ),
+            iconTheme: new IconThemeData(color: Theme.of(context).accentColor),
             automaticallyImplyLeading: false,
           ),
           Divider(),

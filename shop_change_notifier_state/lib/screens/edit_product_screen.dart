@@ -94,12 +94,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     _form.currentState.save();
     if (_editedProduct.id != null) {
-      Provider.of<ProductsProvider>(context, listen: false)
+      await Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
-      Navigator.of(context).pop();
-      setState(() {
-        _isLoading = false;
-      });
     } else {
       try {
         await Provider.of<ProductsProvider>(context, listen: false)
@@ -111,13 +107,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
             Navigator.of(ctx).pop();
           },
         );
-      } finally {
-        Navigator.of(context).pop();
-        setState(() {
-          _isLoading = false;
-        });
       }
+      // finally {
+      //   Navigator.of(context).pop();
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      // }
     }
+    Navigator.of(context).pop();
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<Null> showErrorDialog(String message, Function handler) {

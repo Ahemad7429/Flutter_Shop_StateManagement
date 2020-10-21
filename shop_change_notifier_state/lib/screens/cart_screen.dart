@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/providers.dart';
-import '../widgets/widgets.dart' as widget;
+import '../widgets/widgets.dart' as wid;
 
 class CartScreen extends StatelessWidget {
   @override
@@ -35,18 +35,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text('ORDER NOW'),
-                    onPressed: () {
-                      Provider.of<OrdersProvider>(context, listen: false)
-                          .addItem(
-                        cartProducts: cart.items.values.toList(),
-                        total: cart.totalAmount,
-                      );
-                      cart.clearCart();
-                    },
-                  )
+                  _OrderButton(cart: cart)
                 ],
               ),
             ),
@@ -55,7 +44,7 @@ class CartScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               itemBuilder: (ctx, index) {
-                return widget.CartItem(
+                return wid.CartItem(
                   productId: cart.items.keys.toList()[index],
                   cartItem: cart.items.values.toList()[index],
                 );
@@ -65,6 +54,45 @@ class CartScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class _OrderButton extends StatefulWidget {
+  final CartProvider cart;
+
+  const _OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  @override
+  __OrderButtonState createState() => __OrderButtonState();
+}
+
+class __OrderButtonState extends State<_OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      textColor: Theme.of(context).primaryColor,
+      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
+      onPressed: (widget.cart.items.length <= 0 || _isLoading)
+          ? null
+          : () async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Provider.of<OrdersProvider>(context, listen: false).addItem(
+                cartProducts: widget.cart.items.values.toList(),
+                total: widget.cart.totalAmount,
+              );
+              setState(() {
+                _isLoading = false;
+              });
+              widget.cart.clearCart();
+            },
     );
   }
 }
